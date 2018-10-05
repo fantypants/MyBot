@@ -1,15 +1,15 @@
 defmodule MyBotTest do
   use ExUnit.Case
   doctest MyBot
-
-  test "greets the world" do
-    assert MyBot.hello() == :world
-  end
-
+  
   test "ets Table Creates and operates correctly" do
+    assert MyBot.init_table == :player
   end
 
   test "Placement works anywhere on board" do
+    MyBot.init_table
+    assert MyBot.place({1,2,"N"}) == {:ok, {1,2,"N"}}
+    assert MyBot.place({6,2,"N"}) == {:error, "Invalid Placement"}
   end
 
   test "Can Turn Left From All Directions" do
