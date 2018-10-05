@@ -1,7 +1,7 @@
 defmodule MyBotTest do
   use ExUnit.Case
   doctest MyBot
-  
+
   test "ets Table Creates and operates correctly" do
     assert MyBot.init_table == :player
   end
@@ -13,9 +13,27 @@ defmodule MyBotTest do
   end
 
   test "Can Turn Left From All Directions" do
+    MyBot.init_table
+    MyBot.place({1, 2, "N"})
+    assert MyBot.left(MyBot.get_index) == {:ok, {1, 2, "W"}}
+    MyBot.place({1, 2, "E"})
+    assert MyBot.left(MyBot.get_index) == {:ok, {1, 2, "N"}}
+    MyBot.place({1, 2, "S"})
+    assert MyBot.left(MyBot.get_index) == {:ok, {1, 2, "E"}}
+    MyBot.place({1, 2, "W"})
+    assert MyBot.left(MyBot.get_index) == {:ok, {1, 2, "S"}}
   end
 
   test "Can Turn Right From All Directions" do
+    MyBot.init_table
+    MyBot.place({1, 2, "N"})
+    assert MyBot.right(MyBot.get_index) == {:ok, {1, 2, "E"}}
+    MyBot.place({1, 2, "E"})
+    assert MyBot.right(MyBot.get_index) == {:ok, {1, 2, "S"}}
+    MyBot.place({1, 2, "S"})
+    assert MyBot.right(MyBot.get_index) == {:ok, {1, 2, "W"}}
+    MyBot.place({1, 2, "W"})
+    assert MyBot.right(MyBot.get_index) == {:ok, {1, 2, "N"}}
   end
 
   test "Toy can move Forwards" do

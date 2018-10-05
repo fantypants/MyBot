@@ -22,7 +22,7 @@ defmodule MyBot do
   Fetch the last known position from the game table to use for the targetted move
   """
   def last_position do
-    [{index, location}] = :ets.match(@store_name, get_index)
+    [{index, location}] = :ets.match_object(@store_name, {get_index, :"$2"})
     location
   end
   @doc """
@@ -63,5 +63,23 @@ defmodule MyBot do
   def place({x, y, f}) when x > @max_x or y > @max_y, do: {:error, @placement_error}
   def place({y, f}), do: {:error, @coord_error}
   def place({f}), do: {:error, @coord_error}
+  @doc """
+  We call left/0 initially as we dont have oour current position, so lets retrieve it and call again with left/1
+  """
+  def left(size) when size !== 0 and is_integer(size), do: left(last_position)
+  def left(0), do: IO.puts @play_error
+  def left({x, y, "N"}), do: validate_operation({x, y, "W"})
+  def left({x, y, "W"}), do: validate_operation({x, y, "S"})
+  def left({x, y, "S"}), do: validate_operation({x, y, "E"})
+  def left({x, y, "E"}), do: validate_operation({x, y, "N"})
+  @doc """
+  We call right/0 initially as we dont have oour current position, so lets retrieve it and call again with right/1
+  """
+  def right(size) when size !== 0 and is_integer(size), do: right(last_position)
+  def right(0), do: IO.puts @play_error
+  def right({x, y, "N"}), do: validate_operation({x, y, "E"})
+  def right({x, y, "W"}), do: validate_operation({x, y, "N"})
+  def right({x, y, "S"}), do: validate_operation({x, y, "W"})
+  def right({x, y, "E"}), do: validate_operation({x, y, "S"})
 
 end
