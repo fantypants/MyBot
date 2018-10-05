@@ -81,5 +81,24 @@ defmodule MyBot do
   def right({x, y, "W"}), do: validate_operation({x, y, "N"})
   def right({x, y, "S"}), do: validate_operation({x, y, "W"})
   def right({x, y, "E"}), do: validate_operation({x, y, "S"})
+  @doc """
+  We call move/0 initially as we dont have oour current position, so lets retrieve it and call again with move/1
+  """
+  def move(size) when size !== 0 and is_integer(size), do: move(last_position)
+  def move(0), do: IO.puts @play_error
+  @doc """
+  Correct Movement is validated in the guard clauses
+  """
+  def move({x,y,"N"}) when y+1 <= @max_y, do: validate_operation({x,y+1, "N"})
+  def move({x,y,"E"}) when x+1 <= @max_x, do: validate_operation({x+1,y, "E"})
+  def move({x,y,"S"}) when y-1 >= @min_y, do: validate_operation({x,y-1, "S"})
+  def move({x,y,"W"}) when x-1 >= @min_x, do: validate_operation({x-1,y, "W"})
+  @doc """
+  Guard clauses catching the out-of-bounds clauses and returning subsequent errors
+  """
+  def move({x,y,"N"}) when y+1 > @max_y, do: {:error, @danger_error}
+  def move({x,y,"E"}) when x+1 > @max_x, do: {:error, @danger_error}
+  def move({x,y,"S"}) when y-1 < @min_y, do: {:error, @danger_error}
+  def move({x,y,"W"}) when x-1 < @min_x, do: {:error, @danger_error}
 
 end

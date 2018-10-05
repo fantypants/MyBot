@@ -37,6 +37,11 @@ defmodule MyBotTest do
   end
 
   test "Toy can move Forwards" do
+    MyBot.init_table
+    MyBot.place({1,2,"N"})
+    assert MyBot.move(MyBot.get_index) == {:ok, {1,3,"N"}}
+    MyBot.place({1,5,"N"})
+    assert MyBot.move(MyBot.get_index) == {:error, "Error: Your Robot would fall off the edge"}
   end
 
   test "Toy can report last position" do
