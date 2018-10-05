@@ -45,18 +45,45 @@ defmodule MyBotTest do
   end
 
   test "Toy can report last position" do
+    MyBot.init_table
+    MyBot.place({1, 2, "N"})
+    assert MyBot.report(MyBot.get_index) == {1, 2, "N"}
   end
 
   test "Game Runs A Simulation 1" do
+    MyBot.init_table
+    MyBot.place({1, 2, "N"})
+    MyBot.move(MyBot.get_index)
+    assert MyBot.report(MyBot.get_index) == {1, 3, "N"}
   end
 
   test "Game Runs A Simulation 2" do
+    MyBot.init_table
+    MyBot.place({0, 0, "N"})
+    MyBot.left(MyBot.get_index)
+    assert MyBot.report(MyBot.get_index) == {0, 0, "W"}
   end
 
   test "Game Runs A Simulation 3" do
+    MyBot.init_table
+    MyBot.place({1, 2, "E"})
+    MyBot.move(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    MyBot.left(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    assert MyBot.report(MyBot.get_index) == {3, 3, "N"}
   end
 
   test "Game Runs A Simulation 4" do
+    MyBot.init_table
+    MyBot.place({1, 2, "E"})
+    MyBot.move(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    MyBot.left(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    MyBot.move(MyBot.get_index)
+    assert MyBot.report(MyBot.get_index) == {3, 5, "N"}
   end
 
   test "Incorrect Coordinates are caught" do
