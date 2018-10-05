@@ -156,13 +156,13 @@ defmodule MyBot do
   We need to capture the input in a child function and then process accordingly
   """
   defp translate_input(["PLACE", position_x, position_y, direction]), do: place(:validate, {position_x, position_y, direction})
-  defp translate_input(["MOVE"]), do: move get_index
-  defp translate_input(["LEFT"]), do: left get_index
-  defp translate_input(["RIGHT"]), do: right get_index
-  defp translate_input(["REPORT"]), do: report get_index
+  defp translate_input(["MOVE"]), do: move(get_index)
+  defp translate_input(["LEFT"]), do: left(get_index)
+  defp translate_input(["RIGHT"]), do: right(get_index)
+  defp translate_input(["REPORT"]), do: report(get_index)
   defp translate_input(["INFO"]), do: info
   defp translate_input(["QUIT"]), do: System.halt
-  defp translate_input(["SHOW"]), do: get_all_moves get_index
+  defp translate_input(["SHOW"]), do: get_all_moves(get_index)
   defp translate_input([other]), do: IO.puts @move_error
   defp translate_input([other, x, y, direction]), do: IO.puts @move_error
   @doc """
