@@ -87,9 +87,15 @@ defmodule MyBotTest do
   end
 
   test "Incorrect Coordinates are caught" do
+    MyBot.init_table
+    assert MyBot.place({"E", 1, "N"}) == {:error, "Invalid Placement"}
+    assert MyBot.place({1, "N"}) == {:error, "Invalid Coordinates"}
+    assert MyBot.place({"N"}) == {:error, "Invalid Coordinates"}
   end
 
   test "Incorrect Direction is caught" do
+    MyBot.init_table
+    assert MyBot.place({1, 2, "G"}) == {:error, "Invalid Placement"}
   end
 
 

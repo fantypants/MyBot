@@ -13,7 +13,43 @@ defmodule MyBot do
   @placement_error "Invalid Placement"
   @danger_error "Error: Your Robot would fall off the edge"
   @play_error "Error You Must Place your Robot first"
+  @doc """
+  Main Game Setup which creates the table, prints the moves to use and default places the player
+  """
+  def setup do
+    IO.puts "***************************************************"
+    IO.puts "***************************************************"
+    IO.puts "** Settiing Up New My Robot Game                 **"
+    IO.puts "** Creating the Game Table                       **"
+    IO.puts "** To View All Available Moves Use `info`        **"
+    IO.puts "** Now Entering The Game.......                  **"
+    IO.puts "** Be sure to place your robot!!                 **"
+    IO.puts "***************************************************"
+    IO.puts "***************************************************"
+    IO.puts ""
+    init_table
+    info()
+    play()
+  end
 
+  @doc """
+  Gets all the information to display on the screen for the player to know what moves to use
+  """
+  def info do
+    IO.puts ""
+    IO.puts "*******************************************************"
+    IO.puts "*******************************************************"
+    IO.puts "** Place Your Robot: `PLACE x,y,f` or `PLACE x, y, f`**"
+    IO.puts "** Turn your Robot 90* Left: `LEFT`                  **"
+    IO.puts "** Turn your Robot 90* Right: `RIGHT`                **"
+    IO.puts "** Move your robot forwards one pace: `MOVE`         **"
+    IO.puts "** Get Location of the Robot: `REPORT`               **"
+    IO.puts "** List all Previous Moves: `SHOW`                   **"
+    IO.puts "** To Exit Game: `QUIT`                              **"
+    IO.puts "*******************************************************"
+    IO.puts "*******************************************************"
+    IO.puts ""
+  end
   @doc """
   Initialize the Table
   """
@@ -105,7 +141,82 @@ defmodule MyBot do
   """
   def report(size) when size !== 0 and is_integer(size), do: last_position
   def report(0), do: IO.puts @play_error
+  @doc """
+  Lets print out all our moves we have made using the key we created from the indexes
+  """
+  def get_all_moves(0), do: IO.puts @play_error
+  def get_all_moves(size) when size !== 0 and is_integer(size) do
+    n = get_index
+    1..n |> Enum.each(fn index ->
+      [{index_val, {x, y, f}}] = :ets.match_object(@store_name, {index, :"$2"})
+      IO.puts "Move #{index_val} :: X => #{x}, Y => #{y}, F => #{f}"
+      end)
+  end
+  @doc """
+  We need to capture the input in a child function and then process accordingly
+  """
+  defp translate_input(["PLACE", position_x, position_y, direction]), do: place(:validate, {position_x, position_y, direction})
+  defp translate_input(["MOVE"]), do: move get_index
+  defp translate_input(["LEFT"]), do: left get_index
+  defp translate_input(["RIGHT"]), do: right get_index
+  defp translate_input(["REPORT"]), do: report get_index
+  defp translate_input(["INFO"]), do: info
+  defp translate_input(["QUIT"]), do: System.halt
+  defp translate_input(["SHOW"]), do: get_all_moves get_index
+  defp translate_input([other]), do: IO.puts @move_error
+  defp translate_input([other, x, y, direction]), do: IO.puts @move_error
+  @doc """
+  This is the input for the placement with spaced guard matching
+  `PLACE 1, 2, N`
+  """
+  defp input_for(["PLACE", x, y, f], size) when size == 4, do: translate_input(["PLACE", String.trim(x, ","), String.trim(y, ","), String.trim(f, ",")])
+  defp input_for(move, size) when size > 1 and size !== 2, do: IO.puts @move_error
+  @doc """
+  This is the input for the single moves which we find via guard matching
+  """
+  defp input_for([move], size) when size == 1, do: translate_input([move |> String.trim("\n")])
+  @doc """
+  This is the input for the double placement function,
+  This allows cross input for `PLACE 1,2,N`
+  Here we sanitize the move and then match for the correct placement coordinates, this is
+  """
+  defp input_for([move, coordinates], size) when size == 2 do
+    location = coordinates |> String.split(",")
+    case Enum.count location do
+      3 ->
+        translate_input([
+          move,
+          Enum.fetch!(location, 0),
+          Enum.fetch!(location, 1),
+          Enum.fetch!(location, 2)
+          ])
+      _->
+        IO.puts @move_error
+    end
+  end
+  @doc """
+  We are taking the input and processing the resultant string accordingly using Streams and Enum; Streams will speed up the process due its lazy nature
+  """
+  def input(inp) do
+    key_input = inp
+      |> String.trim("\n")
+      |> String.split(" ")
+    input_for(key_input, Enum.count(key_input))
+  end
+  @doc """
+  Our Main Play Function, here we set a task, wait for the input, process then return to the start of the function to await a new input
+  """
+  def play do
+    IO.puts ""
+    IO.puts "*************************************************"
+    IO.puts "Ready for the next move!"
+    t = Task.async(fn ->
+      IO.gets :stdio, "Input: "
+    end)
+    input(Task.await(t, :infinity)) |> IO.inspect
+    play()
+  end
 
-  
+
 
 end
