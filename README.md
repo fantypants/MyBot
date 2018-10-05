@@ -4,19 +4,26 @@
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `my_bot` to your list of dependencies in `mix.exs`:
+- Clone the Directory
+- Run `mix deps.get` to ensure MyBot is up-to date
+- Start within the parent folder with `iex -S mix`
+- Play and have fun!
 
-```elixir
-def deps do
-  [
-    {:my_bot, "~> 0.1.0"}
-  ]
-end
-```
+## Description
+-----------
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/my_bot](https://hexdocs.pm/my_bot).
+- The application is a simulation of a toy robot moving on a square tabletop,
+  of dimensions 5 units x 5 units.
+- There are no other obstructions on the table surface.
+- The robot is free to roam around the surface of the table, but must be
+  prevented from falling to destruction. Any movement that would result in the
+  robot falling from the table must be prevented, however further valid
+  movement commands are still allowed.
 
-# MyBot
+## Moves
+- `PLACE X,Y,F`
+  Example: `PLACE 1 2 N` will place the robot on the board at 1,2 Facing North
+- `MOVE` Move Forwards one pace
+- `LEFT` Turn 90* Left
+- `RIGHT` Turn Right 90*
+- `REPORT` Return Current Location
