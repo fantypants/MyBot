@@ -21,9 +21,12 @@
   movement commands are still allowed.
 
 ## Moves
-- `PLACE X,Y,F`
-  Example: `PLACE 1 2 N` will place the robot on the board at 1,2 Facing North
+- Valid Directions (f): N, E, S, W
+- `PLACE X,Y,F` - X Coordinate, Y Coordinate , And F is the Direction (N,E,S,W)
+  Example: `PLACE 1, 2, N` or `PLACE 1,2,N` will place the robot on the board at 1,2 Facing North
 - `MOVE` Move Forwards one pace
 - `LEFT` Turn 90* Left
 - `RIGHT` Turn Right 90*
 - `REPORT` Return Current Location
+- `SHOW` Returns all moves
+- `QUIT` Exits the Game

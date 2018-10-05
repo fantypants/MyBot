@@ -170,6 +170,7 @@ defmodule MyBot do
   `PLACE 1, 2, N`
   """
   defp input_for(["PLACE", x, y, f], size) when size == 4, do: translate_input(["PLACE", String.trim(x, ","), String.trim(y, ","), String.trim(f, ",")])
+  defp input_for([move, x, y, f], size) when size == 4, do: IO.puts @move_error
   defp input_for(move, size) when size > 1 and size !== 2, do: IO.puts @move_error
   @doc """
   This is the input for the single moves which we find via guard matching

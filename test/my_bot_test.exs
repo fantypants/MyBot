@@ -98,5 +98,14 @@ defmodule MyBotTest do
     assert MyBot.place({1, 2, "G"}) == {:error, "Invalid Placement"}
   end
 
+  test "Input Guards Work Correctly" do
+    MyBot.init_table
+    assert MyBot.input("PLACE 1,2,N") == {:ok, {1, 2, "N"}}
+    assert MyBot.input("PLACE 1, 2, N") == {:ok, {1, 2, "N"}}
+    assert MyBot.input("PLace 1,2,N") == :ok
+    assert MyBot.input("PLACE 1, 2") == :ok
+    assert MyBot.input("PLACE 1,2,N,6, 8") == :ok
+  end
+
 
 end
